@@ -1,0 +1,15 @@
+2026-10-07 19:41:55,175 | INFO | Raw data found, skipping generator
+2026-10-07 19:41:55,176 | INFO | START load raw
+2026-10-07 19:42:03,626 | INFO | Raw load done.
+2026-10-07 19:42:03,627 | INFO | DONE load raw
+2026-10-07 19:42:03,627 | INFO | START clean staging
+2026-10-07 19:42:04,612 | INFO | Quarantined 5008 bad orders.
+2026-10-07 19:42:04,612 | INFO | DONE clean staging
+2026-10-07 19:42:04,613 | INFO | START build marts
+2026-10-07 19:42:05,320 | INFO | Marts built.
+2026-10-07 19:42:05,320 | INFO | DONE build marts
+2026-10-07 19:42:05,399 | INFO | Quarantined 5008 of 501000 raw orders (1.00%) - pipeline did not crash
+2026-10-07 19:42:05,405 | INFO | START tests
+2026-10-07 19:42:09,107 | INFO | ...                                                                      [100%]
+3 passed in 0.50s
+2026-10-07 19:42:09,108 | INFO | All tests passed. Pipeline complete.

@@ -1,8 +1,11 @@
 ﻿import re
 import time
 import duckdb
+from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+
+load_dotenv()  # loads GEMINI_API_KEY from .env (gitignored)
 
 DB_PATH = "quickbite.duckdb"
 MODEL = "gemini-3.8-flash"
@@ -29,10 +32,19 @@ SYSTEM_PROMPT = f"""You write DuckDB SQL for a food-delivery database.
 {SCHEMA}
 Return ONLY one SELECT query. No explanation, no markdown, no semicolon at the end."""
 
-client = genai.Client()  # reads GEMINI_API_KEY from your environment
+_client = None
+
+
+def get_client():
+    # created on first use so importing this module doesn't require GEMINI_API_KEY
+    global _client
+    if _client is None:
+        _client = genai.Client()  # reads GEMINI_API_KEY from your environment
+    return _client
 
 
 def generate_sql(question: str) -> str:
+    client = get_client()
     last_error = None
     for attempt in range(1, 5):  # try up to 4 times
         try:

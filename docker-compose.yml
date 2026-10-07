@@ -1,0 +1,39 @@
+@'
+services:
+  pipeline:
+    build: .
+    command: python pipeline/run_all.py
+    environment:
+      ALERT_WEBHOOK_URL: ${ALERT_WEBHOOK_URL:-}
+    volumes:
+      - .:/app
+
+  dashboard:
+    build: .
+    command: streamlit run analytics/dashboard.py --server.port=8501 --server.address=0.0.0.0 --server.headless=true
+    ports:
+      - "8501:8501"
+    depends_on:
+      pipeline:
+        condition: service_completed_successfully
+    volumes:
+      - .:/app
+
+  train:
+    build: .
+    command: python model/train.py
+    profiles: ["tools"]
+    volumes:
+      - .:/app
+
+  assistant:
+    build: .
+    command: python assistant/text_to_sql.py
+    profiles: ["tools"]
+    stdin_open: true
+    tty: true
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    volumes:
+      - .:/app
+'@ | Set-Content -Path docker-compose.yml -Encoding ascii
